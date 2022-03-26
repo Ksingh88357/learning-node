@@ -1,5 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://learning-node:learning-node@cluster0.plsjs.mongodb.net/learning-node?retryWrites=true&w=majority",
-  "jwtSecret": "mysecrettoken",
-  "GOOGLE_CLIENT_ID": "13748447223-1qkt6i458p9rpdpkb2pve3es1nch259s.apps.googleusercontent.com"
-}

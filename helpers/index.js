@@ -1,9 +1,12 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const config = require("config");
 const fs = require("fs");
 const { OAuth2Client } = require("google-auth-library");
-const CLIENT_ID = config.get("GOOGLE_CLIENT_ID");
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
 const client = new OAuth2Client(CLIENT_ID);
 

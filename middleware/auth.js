@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const config = require("config");
+const dotenv = require("dotenv");
+dotenv.config();
 const { getUser } = require("../database/repository/usersRepo");
 const { getUserDomainIds } = require("../database/repository/userDomainsRepo");
 
@@ -14,7 +15,7 @@ module.exports = async function (req, res, next) {
 
   // Verify token
   try {
-    const decoded = jwt.verify(token, config.get("jwtSecret"));
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded.user;
     const user = await getUser(req.user.id);
     req.user.role = user.role;
