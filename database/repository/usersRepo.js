@@ -17,8 +17,18 @@ const getUser = (_id) => {
   return User.findOne({ _id }).select("-password");
 };
 
-const getUsers = () => {
-  return User.find().select("-password");
+const getUsers = async (page, limit) => {
+  const users = await User.find()
+    .select("-password")
+    .sort({ createdAt: -1 })
+    .limit(limit * 1)
+    .skip((page - 1) * limit);
+  const count = await User.countDocuments();
+  return {
+    users,
+    totalPages: Math.ceil(count / limit),
+    currentPage: page,
+  };
 };
 
 const findUserById = (_id) => {

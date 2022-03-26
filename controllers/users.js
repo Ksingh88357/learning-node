@@ -1,7 +1,15 @@
 const methods = {};
 const { validationResult } = require("express-validator");
 const { bcryptPassword, getToken, checkPassword } = require("../helpers");
-const { createUser, findUserByEmail, getUser, getUsers, findUserById, updateUser, deleteUser } = require("../database/repository/usersRepo");
+const {
+  createUser,
+  findUserByEmail,
+  getUser,
+  getUsers,
+  findUserById,
+  updateUser,
+  deleteUser,
+} = require("../database/repository/usersRepo");
 
 methods.createUser = async (req, res) => {
   const errors = validationResult(req);
@@ -87,15 +95,16 @@ methods.getUser = async (req, res) => {
 
 methods.getUsers = async (req, res) => {
   try {
-    const users = await getUsers();
-    res.status(200).json({ users });
+    const { page = 1, limit = 10 } = req.query;
+    const users = await getUsers(page, limit);
+    res.status(200).json(users);
   } catch (err) {
     console.error(err.message);
     return res.status(500).send(err.message);
   }
 };
 
-methods.getUserById= async (req, res) => {
+methods.getUserById = async (req, res) => {
   try {
     const user = await findUserById(req.params.id);
     res.status(200).json({ user });
@@ -105,7 +114,7 @@ methods.getUserById= async (req, res) => {
   }
 };
 
-methods.updateUser= async (req, res) => {
+methods.updateUser = async (req, res) => {
   try {
     const user = await updateUser(req.params.id, req.body.name);
     res.status(200).json({ user });
@@ -115,7 +124,7 @@ methods.updateUser= async (req, res) => {
   }
 };
 
-methods.deleteUser= async (req, res) => {
+methods.deleteUser = async (req, res) => {
   try {
     const user = await deleteUser(req.params.id);
     res.status(200).json({ user });
