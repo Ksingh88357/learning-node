@@ -35,9 +35,34 @@ router.post(
   usersController.loginUser
 );
 
-// @route   GET api/users
+// @route   GET api/users/auth
 // @desc    Get User
 // @access  Private
-router.get(`/`, auth, usersController.getUser);
+router.get(`/auth`, auth, usersController.getUser);
+
+// @route   GET api/users
+// @desc    Get Users
+// @access  Private
+router.get(`/`, auth, usersController.getUsers);
+
+// @route   GET api/users/:id
+// @desc    Get User By Id
+// @access  Private
+router.get(`/:id`, auth, usersController.getUserById);
+
+// @route   PUT api/users/:id
+// @desc    Update User
+// @access  Private
+router.put(
+  `/:id`,
+  [check("name", "Name is Required").not().isEmpty()],
+  auth,
+  usersController.updateUser
+);
+
+// @route   DELETE api/users/:id
+// @desc    Delete User
+// @access  Private
+router.delete(`/:id`, auth, usersController.deleteUser);
 
 module.exports = router;
