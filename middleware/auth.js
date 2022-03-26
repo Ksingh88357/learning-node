@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-const { getUser } = require("../database/repository/usersRepo");
-const { getUserDomainIds } = require("../database/repository/userDomainsRepo");
 
 dotenv.config();
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = async function (req, res, next) {
   // Get token from the header
@@ -16,16 +16,9 @@ module.exports = async function (req, res, next) {
 
   // Verify token
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET);
     req.user = decoded.user;
-    const user = await getUser(req.user.id);
-    req.user.role = user.role;
-    req.user.domain_ids = await getUserDomainIds(req.user.id, req.user.role);
-    if(req.user.domain_ids.length === 0 && req.user.role === "USER") {
-      return res.status(401).json({ msg: "Please check with ADMIN for the domains access!" });
-    }else{
-      next();
-    }
+    next();
   } catch (err) {
     return res.status(401).json({ msg: "Token is not valid" });
   }

@@ -9,11 +9,16 @@ const createUser = (name, email, password) => {
   return user.save();
 };
 
-const findUser = (email) => {
+const findUserByEmail = (email) => {
   return User.findOne({ email });
+};
+
+const getUser = (_id) => {
+  return User.findOne({ _id }).select("-password");
 };
 
 module.exports = {
   createUser,
-  findUser,
+  findUserByEmail,
+  getUser
 };
