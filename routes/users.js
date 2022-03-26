@@ -3,7 +3,7 @@ const router = express.Router();
 const { check } = require("express-validator");
 const usersController = require("../controllers/users");
 
-// @route   POST api/users/createUser
+// @route   POST api/users
 // @desc    Create User
 // @access  Public
 router.post(
@@ -17,17 +17,6 @@ router.post(
     ).isLength({ min: 6 }),
   ],
   usersController.createUser
-);
-
-// @route   POST api/users/googleAuth
-// @desc    Create User
-// @access  Public
-router.post(
-  `/`,
-  [
-    check("token", "Token is Required").not().isEmpty()
-  ],
-  usersController.googleAuth
 );
 
 module.exports = router;

@@ -1,14 +1,11 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
-const { OAuth2Client } = require("google-auth-library");
 const dotenv = require("dotenv");
 
 dotenv.config();
 
-const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-
-const client = new OAuth2Client(CLIENT_ID);
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const uploadImage = (image) => {
   try {
@@ -38,7 +35,7 @@ const getToken = (payload) => {
   return new Promise((resolve, reject) => {
     jwt.sign(
       payload,
-      config.get("jwtSecret"),
+      JWT_SECRET,
       { expiresIn: 360000 },
       (err, token) => {
         if (err) throw err;
@@ -48,22 +45,9 @@ const getToken = (payload) => {
   });
 };
 
-const googleAuth = async (token) => {
-  const ticket = await client.verifyIdToken({
-    idToken: token,
-    audience: CLIENT_ID,
-  });
-  const payload = ticket.getPayload();
-  console.log(`User ${payload.name} verified`);
-  const { sub, email, name, picture } = payload;
-  const userId = sub;
-  return { userId, email, fullName: name, photoUrl: picture };
-};
-
 module.exports = {
   uploadImage,
   bcryptPassword,
   getToken,
   checkPassword,
-  googleAuth,
 };

@@ -6,6 +6,7 @@ const connectDB = require("./database/db");
 // Configure dotenv
 dotenv.config();
 
+// Configure Express
 const app = express();
 
 // Connect Database

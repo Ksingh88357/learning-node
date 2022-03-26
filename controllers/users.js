@@ -1,6 +1,6 @@
 const methods = {};
 const { validationResult } = require("express-validator");
-const { bcryptPassword, getToken, googleAuth } = require("../helpers");
+const { bcryptPassword, getToken } = require("../helpers");
 const { createUser, findUser } = require("../database/repository/usersRepo");
 
 methods.createUser = async (req, res) => {
@@ -10,7 +10,7 @@ methods.createUser = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { name, email, password, domain_ids } = req.body;
+  const { name, email, password } = req.body;
 
   try {
     const user = await findUser(email);
@@ -31,26 +31,7 @@ methods.createUser = async (req, res) => {
 
     const token = await getToken(payload);
 
-    return res.json({ token });
-  } catch (err) {
-    console.error(err.message);
-    return res.status(500).send(err.message);
-  }
-};
-
-methods.googleAuth = async (req, res) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  const { token } = req.body;
-
-  try {
-    const result = await googleAuth(token);
-
-    return res.json({ result });
+    return res.status(201).json({ token });
   } catch (err) {
     console.error(err.message);
     return res.status(500).send(err.message);

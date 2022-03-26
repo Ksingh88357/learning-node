@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-dotenv.config();
 const { getUser } = require("../database/repository/usersRepo");
 const { getUserDomainIds } = require("../database/repository/userDomainsRepo");
+
+dotenv.config();
 
 module.exports = async function (req, res, next) {
   // Get token from the header
