@@ -1,10 +1,11 @@
 const User = require("../models/User");
 
-const createUser = (name, email, password) => {
+const createUser = (name, email, password, type = "NORMAL") => {
   let user = new User({
     name,
     email,
     password,
+    type
   });
   return user.save();
 };

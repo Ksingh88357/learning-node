@@ -65,4 +65,9 @@ router.put(
 // @access  Private
 router.delete(`/:id`, auth, usersController.deleteUser);
 
+// @route   POST api/users/googleLogin
+// @desc    Google Login
+// @access  Public
+router.post(`/googleLogin`, usersController.googleLogin);
+
 module.exports = router;

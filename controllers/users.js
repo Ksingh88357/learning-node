@@ -1,5 +1,6 @@
 const methods = {};
 const { validationResult } = require("express-validator");
+const { OAuth2Client } = require("google-auth-library");
 const { bcryptPassword, getToken, checkPassword } = require("../helpers");
 const {
   createUser,
@@ -10,6 +11,9 @@ const {
   updateUser,
   deleteUser,
 } = require("../database/repository/usersRepo");
+
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const client = new OAuth2Client(CLIENT_ID);
 
 methods.createUser = async (req, res) => {
   const errors = validationResult(req);
@@ -128,6 +132,44 @@ methods.deleteUser = async (req, res) => {
   try {
     const user = await deleteUser(req.params.id);
     res.status(200).json({ user });
+  } catch (err) {
+    console.error(err.message);
+    return res.status(500).send(err.message);
+  }
+};
+
+methods.googleLogin = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    const result = await client.verifyIdToken({
+      idToken: token,
+      audience: CLIENT_ID,
+    });
+
+    const { name, email } = result.getPayload();
+    
+    const password = "12345678";
+
+    const user = await findUserByEmail(email);
+
+    if (user) {
+      return res.status(400).json({ errors: [{ msg: "User already exists" }] });
+    }
+
+    const hashPassword = await bcryptPassword(password);
+
+    const userCreate = await createUser(name, email, hashPassword, "GOOGLE");
+
+    const payload = {
+      user: {
+        id: userCreate.id,
+      },
+    };
+
+    const jwtToken = await getToken(payload);
+
+    return res.status(200).json({ token: jwtToken });
   } catch (err) {
     console.error(err.message);
     return res.status(500).send(err.message);

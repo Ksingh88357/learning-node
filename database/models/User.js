@@ -21,6 +21,11 @@ const UserSchema = new Schema(
       required: true,
       default: "USER"
     },
+    type: {
+      type: String,
+      required: true,
+      default: "NORMAL"
+    },
     status: {
       type: Number,
       required: true,
