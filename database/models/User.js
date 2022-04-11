@@ -26,6 +26,21 @@ const UserSchema = new Schema(
       required: true,
       default: "NORMAL"
     },
+    google_id: {
+      type: String,
+      required: true,
+      default: "NOT_AVAILABLE"
+    },
+    facebook_id: {
+      type: String,
+      required: true,
+      default: "NOT_AVAILABLE"
+    },
+    isVerified: {
+      type: Number,
+      required: true,
+      default: 0
+    },
     status: {
       type: Number,
       required: true,

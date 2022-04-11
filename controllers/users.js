@@ -149,7 +149,7 @@ methods.googleLogin = async (req, res) => {
 
     const { name, email } = result.getPayload();
     
-    const password = "12345678";
+    const password = null;
 
     const user = await findUserByEmail(email);
 
@@ -157,9 +157,7 @@ methods.googleLogin = async (req, res) => {
       return res.status(400).json({ errors: [{ msg: "User already exists" }] });
     }
 
-    const hashPassword = await bcryptPassword(password);
-
-    const userCreate = await createUser(name, email, hashPassword, "GOOGLE");
+    const userCreate = await createUser(name, email, password, "GOOGLE");
 
     const payload = {
       user: {
